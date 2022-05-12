@@ -1,22 +1,22 @@
 import React from "react";
-import DailyForecast from "../models/DailyForecast";
-import WeatherLocation from "../models/WeatherLocation";
+import ForecastInformation from "../models/ForecastInformation";
+import Location from "../models/Location";
 
 interface LocationCardProps {
-    location: DailyForecast;
+  location: Location;
+  forecast: ForecastInformation | null;
 }
 
 export const LocationCard: React.FC<LocationCardProps> = (props) => {
-    return (
-        <div>
-            <div>{props.location.city.name}</div>
-            {props.location.list.map((forecast) => {
-                return (
-                    <div>
-                        {/* <div>{forecast.dt_txt}</div> */}
-                    </div>
-                );
-            })}
-        </div>
-    );
+  return (
+    <div>
+      {props.location.AdministrativeArea.LocalizedName}
+
+      {props.forecast ? (
+        <div>{props.forecast.Headline.Text}</div>
+      ) : (
+        <div>asdasd</div>
+      )}
+    </div>
+  );
 };

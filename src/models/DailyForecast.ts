@@ -1,9 +1,28 @@
-import City from "./City";
-import Forecast from "./Forecast";
-
 export default interface DailyForecast {
-    city: City;
-    cnt: number;
-    cod: string;
-    list: Forecast[];
+  Date: string;
+  Day: {
+    HasPrecipitation: boolean;
+    Icon: number;
+    IconPhrase: string;
+    PrecipitationIntensity: string;
+    PrecipitationType: string;
+  };
+  EpochDate: number;
+  Night: {
+    HasPrecipitation: boolean;
+    Icon: number;
+    IconPhrase: string;
+  };
+  Temperature: {
+    Maximum: {
+      Unit: string;
+      UnitType: number;
+      Value: number;
+    };
+    Minimum: {
+      Unit: string;
+      UnitType: number;
+      Value: number;
+    };
+  };
 }

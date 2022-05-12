@@ -1,40 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { LocationCard } from "./components/LocationCard";
+import useGeoLocation from "./hooks/useGeoLocation";
 import DailyForecast from "./models/DailyForecast";
+import ForecastInformation from "./models/ForecastInformation";
+import Location from "./models/Location";
 import WeatherLocation from "./models/WeatherLocation";
+import { getCityByName, getGeoPosition } from "./service/location-service";
+import { getForecastLocation } from "./service/weather-service";
 
 function App() {
-    const [cityName, setCityName] = useState<string>("");
-    const [location, setLocation] = useState<DailyForecast | null>(null);
+  const [cityName, setCityName] = useState<string>("");
+  const [location, setLocation] = useState<Location | null>(null);
+  const [forecastInformation, setForecastInformation] =
+    useState<ForecastInformation | null>(null);
+  const geoLocation = useGeoLocation();
 
-    const onCityNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCityName(e.target.value);
-    };
+  const onCityNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCityName(e.target.value);
+  };
 
-    const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            getWeather();
+  const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      getCityByName(cityName).then((res) => {
+        console.log(res);
+        if (res.length > 0) {
+          setLocation(() => res[0]);
+          console.log(res[0].Key);
+          getForecastLocation(location!.Key).then((res) =>
+            setForecastInformation(res)
+          );
         }
-    };
+      });
+    }
+  };
 
-    const getWeather = () => {
-        const apiKey = import.meta.env.VITE_APP_WEATHER_API_KEY;
-        fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=London&days=2&aqi=no&alerts=no`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data)
-                // setLocation(data);
-            });
-    };
+  useEffect(() => {
+    if (geoLocation.coords) {
+      getGeoPosition(
+        geoLocation.coords.latitude,
+        geoLocation.coords.longitude
+      ).then((res) => {
+        setLocation(res);
+      });
+    }
+  }, [geoLocation]);
 
-    return (
-        <div className="App">
-            <input type="text" value={cityName} onKeyDown={onSearch} onChange={onCityNameChange} />
+  return (
+    <div className="App">
+      <input
+        type="text"
+        value={cityName}
+        onKeyDown={onSearch}
+        onChange={onCityNameChange}
+      />
 
-            {location && <LocationCard location={location} />}
-        </div>
-    );
+      {location && <LocationCard location={location} forecast={forecastInformation} />}
+      {!location && <div>Not found</div>}
+    </div>
+  );
 }
 
 export default App;
