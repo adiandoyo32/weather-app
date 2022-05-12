@@ -95,7 +95,7 @@ export const LocationCard: React.FC<LocationCardProps> = (props) => {
                     </Box>
                 </Box>
             ) : (
-                <div>asdasd</div>
+                <div>Nothing...</div>
             )}
         </Box>
     );

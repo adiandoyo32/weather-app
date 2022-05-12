@@ -8,6 +8,7 @@ import { getCityByName, getGeoPosition } from "./service/location-service";
 import { getForecastLocation } from "./service/weather-service";
 import { Box, Container, Input, InputGroup, InputRightElement, ListItem, UnorderedList } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
+import ForecastCard from "./components/ForecastCard";
 
 function App() {
     const [cityName, setCityName] = useState<string>("");
@@ -61,17 +62,18 @@ function App() {
                         <InputRightElement pointerEvents="none" children={<SearchIcon color="gray.300" />} />
                     </InputGroup>
 
-                    <Box borderWidth="1px">
+                    {/* <Box borderWidth="1px">
                         <UnorderedList>
                             <ListItem>Lorem ipsum dolor sit amet</ListItem>
                             <ListItem>Consectetur adipiscing elit</ListItem>
                             <ListItem>Integer molestie lorem at massa</ListItem>
                             <ListItem>Facilisis in pretium nisl aliquet</ListItem>
                         </UnorderedList>
-                    </Box>
+                    </Box> */}
 
                     {location && <LocationCard location={location} forecast={forecastInformation} />}
                     {!location && <div>Not found</div>}
+                    <ForecastCard forecast={forecastInformation} />
                 </Box>
             </Container>
         </div>
