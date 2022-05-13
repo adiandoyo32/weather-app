@@ -103,7 +103,6 @@ function App() {
           {location && (
             <LocationCard location={location} forecast={forecastInformation} />
           )}
-          {!location && <div>Not found</div>}
           <ForecastCard forecast={forecastInformation} />
         </Box>
       </Container>
