@@ -8,6 +8,7 @@ import { getCityByName, getGeoPosition } from "./service/location-service";
 import { getForecastLocation } from "./service/weather-service";
 import {
   Box,
+  Button,
   Container,
   Input,
   InputGroup,
@@ -32,12 +33,19 @@ function App() {
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       getCityByName(cityName).then((res) => {
-        console.log(res);
         if (res.length > 0) {
           setLocation(() => res[0]);
         }
       });
     }
+  };
+
+  const handleClick = () => {
+    getCityByName(cityName).then((res) => {
+      if (res.length > 0) {
+        setLocation(() => res[0]);
+      }
+    });
   };
 
   useEffect(() => {
@@ -50,12 +58,12 @@ function App() {
 
   useEffect(() => {
     if (geoLocation.coords) {
-      // getGeoPosition(
-      //   geoLocation.coords.latitude,
-      //   geoLocation.coords.longitude
-      // ).then((res) => {
-      //   setLocation(res);
-      // });
+      getGeoPosition(
+        geoLocation.coords.latitude,
+        geoLocation.coords.longitude
+      ).then((res) => {
+        setLocation(res);
+      });
     }
   }, [geoLocation]);
 
@@ -74,10 +82,13 @@ function App() {
               autoComplete="off"
               name="city-name"
             />
-            <InputRightElement
-              pointerEvents="none"
-              children={<SearchIcon color="gray.300" />}
-            />
+            <InputRightElement width="3.5rem">
+              <Button
+                leftIcon={<SearchIcon />}
+                size="md"
+                onClick={handleClick}
+              ></Button>
+            </InputRightElement>
           </InputGroup>
 
           {/* <Box borderWidth="1px">
